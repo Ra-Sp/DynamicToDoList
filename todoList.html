@@ -1,11 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./todoList.css" />
     <title>To-do!</title>
 </head>
+
 <body>
-    
+
+    <h1>To-Do!</h1>
+
+    <div class="Add-Task">
+        <input type="text" id="task" placeholder="What's the task?" />
+        <input type="date" id="deadline" placeholder="What's the deadline?" />
+        <button onclick="addTask()">Add Task</button>
+    </div>
+
+    <table class="task-table">
+        <thead>
+            <tr>
+                <th>S. No.</th>
+                <th>Task</th>
+                <th>Deadline</th>
+            </tr>
+        </thead>
+        <tbody id="tasks"></tbody>
+
+    </table>
+
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function(){
+            const taskInput =   document.getElementById("task");
+            const deadlineInput =   document.getElementById("deadline");
+            const tasks = document.getElementById("tasks");
+
+            function addTask(){
+                const taskDesc = taskInput.value.trim();
+                const taskDeadline = new Date(deadlineInput.value);
+
+                // console.log(taskDesc, deadlineDate);
+
+                if (taskDesc !== ""){
+                    const tableRow = document.createElement("tr");
+
+                    const sno = document.createElement("td");
+                    sno.textContent = tasks.children.length + 1;
+
+                    const taskCell = document.createElement("td");
+                    taskCell.textContent = taskDesc;
+
+                    const deadlineCell = document.createElement("td");
+                    deadlineCell.textContent = taskDeadline.toLocaleDateString();
+
+                    tableRow.appendChild(sno);
+                    tableRow.appendChild(taskCell);
+                    tableRow.appendChild(deadlineCell);
+
+                    tasks.appendChild(tableRow);
+
+                    taskInput.value = "";
+                    deadlineInput.value = "";
+                }
+            }
+
+            window.addTask = addTask;
+
+        });
+
+    </script>
+
 </body>
+
 </html>
