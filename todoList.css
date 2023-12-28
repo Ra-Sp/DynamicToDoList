@@ -1,9 +1,45 @@
-h1{
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    font-size: large;
+}
+
+table{
+    margin: 20px auto;
+    border-collapse: separate; /* Separate border model for spacing */
+    border-spacing: 40px;
+    overflow-y: auto; /* Enable vertical scrollbar if content overflows */
     text-align: center;
 }
 
+thead th, tbody td {
+    padding: 10px;
+}
 
-table{
-    padding: 5%;
-    border-color: black;
+button{
+    border: none;
+    background: none;
+    margin: auto;
+}
+
+button:hover{
+    color: green;
+}
+
+i{
+    font-size:x-large;
+}
+
+.Add-Task{
+    display: flex;
+    justify-content: center;
+    padding-top: 2%;
+}
+
+input{
+    margin: 4px;
 }

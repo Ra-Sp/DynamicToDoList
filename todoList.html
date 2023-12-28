@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="./todoList.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <title>To-do!</title>
 </head>
 
@@ -15,36 +16,37 @@
     <div class="Add-Task">
         <input type="text" id="task" placeholder="What's the task?" />
         <input type="date" id="deadline" placeholder="What's the deadline?" />
-        <button onclick="addTask()">Add Task</button>
+        <button onclick="addTask()"><i class="fa-solid fa-plus"></i></button>
     </div>
 
-    <table class="task-table">
-        <thead>
-            <tr>
-                <th>S. No.</th>
-                <th>Task</th>
-                <th>Deadline</th>
-            </tr>
-        </thead>
-        <tbody id="tasks"></tbody>
-
-    </table>
-
+    <div class="task-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>S. No.</th>
+                    <th>Task</th>
+                    <th>Deadline</th>
+                </tr>
+            </thead>
+            <tbody id="tasks"></tbody>
+        </table>
+    </div>    
 
     <script>
 
-        document.addEventListener("DOMContentLoaded", function(){
-            const taskInput =   document.getElementById("task");
-            const deadlineInput =   document.getElementById("deadline");
+        document.addEventListener("DOMContentLoaded", function () {
+            const taskInput = document.getElementById("task");
+            const deadlineInput = document.getElementById("deadline");
             const tasks = document.getElementById("tasks");
+            const noTasksMessage = document.getElementById("no-tasks-message");
 
-            function addTask(){
+            function addTask() {
                 const taskDesc = taskInput.value.trim();
                 const taskDeadline = new Date(deadlineInput.value);
 
                 // console.log(taskDesc, deadlineDate);
 
-                if (taskDesc !== ""){
+                if (taskDesc !== "") {
                     const tableRow = document.createElement("tr");
 
                     const sno = document.createElement("td");
@@ -56,15 +58,64 @@
                     const deadlineCell = document.createElement("td");
                     deadlineCell.textContent = taskDeadline.toLocaleDateString();
 
+                    const actionCell = document.createElement("td");
+                    const removeButton = document.createElement("button");
+                    const icon = document.createElement("i");
+                    icon.className = "fas fa-check";
+                    removeButton.appendChild(icon);
+                    removeButton.addEventListener("click", removeTask);
+                    actionCell.appendChild(removeButton);
+
                     tableRow.appendChild(sno);
                     tableRow.appendChild(taskCell);
                     tableRow.appendChild(deadlineCell);
+                    tableRow.appendChild(actionCell);
 
                     tasks.appendChild(tableRow);
 
                     taskInput.value = "";
                     deadlineInput.value = "";
+
+                    sortByDeadline();
                 }
+            }
+
+            function removeTask() {
+                const row = this.closest("tr");
+                row.remove();
+                updateSerialNumber();
+            }
+
+            function updateSerialNumber() {
+                const rows = taskList.getElementsByTagName("tr");
+                for (let i = 0; i < rows.length; i++) {
+                    const serialNumberCell = rows[i].getElementsByTagName("td")[0];
+                    serialNumberCell.textContent = i + 1;
+                }
+            }
+
+            function sortByDeadline() {
+                const rows = Array.from(tasks.getElementsByTagName("tr"));
+
+                rows.sort((a, b) => {
+                    const dateA = new Date(a.getElementsByTagName("td")[2].textContent);
+                    const dateB = new Date(b.getElementsByTagName("td")[2].textContent);
+
+                    return dateA - dateB
+                });
+
+                // Clearing the existing table
+                while (tasks.firstChild) {
+                    tasks.removeChild(tasks.firstChild);
+                }
+
+                // Appending the sorted list
+                rows.forEach((row, index) => {
+                    const serialNumberCell = row.getElementsByTagName("td")[0];
+                    serialNumberCell.textContent = index + 1;
+                    tasks.appendChild(row);
+                });
+
             }
 
             window.addTask = addTask;
